@@ -44,5 +44,5 @@ if [ `ls -l | grep ".history.txt" | wc -l` -eq 0 ]; then
 fi
 
 for ws in "${WEBSITES[@]}"; do  
-    check_website "$ws";
+    check_website "$ws" &
 done
