@@ -46,3 +46,5 @@ fi
 for ws in "${WEBSITES[@]}"; do  
     check_website "$ws" &
 done
+
+wait

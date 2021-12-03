@@ -1,18 +1,22 @@
 #!/bin/bash
+# Άσκηση 2 - Κατέβασμα εργασιών με το Git
 
 # Δημιουργώ προσωρινούς φακέλους όπου μπορούν να αποθηκευτούν τα
 #   ενδιάμεσα αρχεία που δημιουργούνται και δεν απαιτούνται να υπάρχουν
-#   στον ίδιο φάκελο με το script.
-mkdir -p /tmp/script2_tmp_files/unzipped_tar/
-
-# Δημιουργώ συντομεύσεις για τον φάκελο με τα προσωρινά αρχεία και
+#   στον ίδιο φάκελο με το script. Η μεταβλητή αποθηκεύει τον αριθμό των δευτερολέπτων
+#   που έχουν περάσει από 1970-01-01 00:00:00 UTC, ως τρόπο να αποφευχθεί να χρησιμοποιηθεί παραπάνω από μία
+#   φορές ο ίδιος κατάλογος με διαφορετικά ορίσματα.
+#
+# Επίσης, δημιουργώ συντομεύσεις για τον φάκελο με τα προσωρινά αρχεία και
 #   με εκείνον που (θα) περιέχει τα περιεχόμενα του συμπιεσμένου αρχείου
 #   που δίνεται.
-TAR_DIR="/tmp/script2_tmp_files/unzipped_tar/"
-TMP_DIR="/tmp/script2_tmp_files"
+NOW_TIME=`date "+%s"`
+TMP_DIR=`echo "/tmp/script2_tmp_files_""$NOW_TIME""/"`
+TAR_DIR=`echo "$TMP_DIR""unzipped_tar/"`
+mkdir -p $TAR_DIR
 
 # Αποσυμπίεση αρχείου.
-tar xf "$1" -C $TAR_DIR
+tar xf "$1" --overwrite-dir -C $TAR_DIR
 
 # Ανιχνεύω όλα τα αρχεία .txt εντός του δοθέντος συμπιεσμένου αρχείου
 #   και απομονώνω το κάθε ένα σε array.
@@ -62,7 +66,7 @@ for dr in "${LIST_OF_REPOS[@]}"; do
     
     OK_FILE_STR=$'./\n./more\n./more/dataC.txt\n./more/dataB.txt\n./dataA.txt'
     
-    THIS_FILE_STR=`find ./ -not -path "*/\.*"`
+    THIS_FILE_STR=`find ./ -not -path "*/\.git*"`
     
     if [ "$THIS_FILE_STR" = "$OK_FILE_STR" ]; then
         echo "Directory structure is OK."
